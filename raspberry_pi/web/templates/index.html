@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Pi Video Surveillance</title>
+</head>
+<body style="font-size: 30pt">
+
+<h1>Pi Video Surveillance</h1>
+<img src="{{ url_for('video_feed') }}"><br><br>
+Crossings <span id="cross"></span><br>
+Cube <span id="cube"></span><br>
+
+<script>
+    function update() {
+        fetch('/info')
+            .then(
+                function (response) {
+                    if (response.status === 200) {
+                        response.json().then(function (resp) {
+                            document.getElementById('cross').textContent = resp['crossings'];
+                            document.getElementById('cube').textContent = resp['action'];
+                        });
+                    }
+                    setTimeout(update)
+                }
+            )
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
+    }
+    setTimeout(update)
+</script>
+</body>
+</html>
